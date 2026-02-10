@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Modern Multi-Step Checkout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container my-5">
+  <div class="row g-4">
+    
+    <div class="col-lg-8">
+      
+      <div class="stepper-wrapper">
+        <div class="stepper-item active" id="s1-node">
+          <div class="step-counter">1</div>
+          <div class="step-name">Shipping</div>
+        </div>
+        <div class="stepper-item" id="s2-node">
+          <div class="step-counter">2</div>
+          <div class="step-name">Billing</div>
+        </div>
+        <div class="stepper-item" id="s3-node">
+          <div class="step-counter">3</div>
+          <div class="step-name">Payment</div>
+        </div>
+      </div>
+
+      <div class="checkout-card">
+        <div class="step active" id="step1">
+          <h4 class="mb-4">Shipping Information</h4>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Full Name</label>
+              <input class="form-control" id="name" placeholder="Enter Name" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Country</label>
+              <select class="form-select" id="country">
+                <option value="">Select Country</option>
+                <option value="IN">India</option>
+                <option value="US">USA</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Postal Code</label>
+              <input class="form-control" id="postal" placeholder="110001">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Phone Number</label>
+              <input class="form-control" id="phone" placeholder="+1 (555) 000-0000">
+            </div>
+            <div class="col-12 mt-4">
+              <button class="btn btn-primary w-100" onclick="validateStep1()">Continue to Billing</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" id="step2">
+          <h4 class="mb-4">Billing Details</h4>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Billing Address</label>
+              <input class="form-control" id="address" placeholder="123 Street Name" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">City</label>
+              <input class="form-control" id="city" placeholder="Enter city" required>
+            </div>
+            <div class="col-6 mt-4">
+              <button class="btn btn-link text-decoration-none text-muted" onclick="prevStep()"><i class="bi bi-arrow-left"></i> Back</button>
+            </div>
+            <div class="col-6 mt-4 text-end">
+              <button class="btn btn-primary px-5" onclick="validateStep2()">Next Step</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="step" id="step3">
+          <h4 class="mb-4">Payment Method</h4>
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Card Number</label>
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-credit-card"></i></span>
+                <input class="form-control border-start-0" id="card" placeholder="0000 0000 0000 0000">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Expiry Date</label>
+              <input class="form-control" type="month" id="expiry">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">CVV</label>
+              <input class="form-control" placeholder="123">
+            </div>
+            <div class="col-12 mt-4">
+              <button class="btn btn-success w-100 py-3" onclick="validateStep3()">
+                <i class="bi bi-shield-lock"></i> Complete Secure Payment
+              </button>
+              <button class="btn btn-link w-100 text-muted mt-2" onclick="prevStep()">Go back to Billing</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+
+    <div id="successOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; backdrop-filter: blur(5px);">
+  <div class="d-flex align-items-center justify-content-center h-100">
+    <div class="card p-5 text-center shadow-lg" style="max-width: 400px; border-radius: 20px;">
+      <div class="mb-4">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+      </div>
+      <h2 class="fw-bold">Payment Success!</h2>
+      <p class="text-muted">Your payment has been processed successfully. Your order is on its way!</p>
+      <button class="btn btn-primary w-100 py-2 mt-3" onclick="location.reload()">Back to Start</button>
+    </div>
+  </div>
+</div>
+
+    <div class="col-lg-4">
+      <div class="summary-box p-4">
+        <h5 class="mb-4">Order Summary</h5>
+        <div class="d-flex flex-column gap-3">
+          <div class="d-flex justify-content-between border-bottom pb-2">
+            <span class="text-muted small">Customer</span>
+            <span id="sName" class="fw-bold">-</span>
+          </div>
+          <div class="d-flex justify-content-between border-bottom pb-2">
+            <span class="text-muted small">Location</span>
+            <span id="sCountry" class="fw-bold">-</span>
+          </div>
+          <div class="d-flex justify-content-between border-bottom pb-2">
+            <span class="text-muted small">Phone</span>
+            <span id="sPhone" class="fw-bold">-</span>
+          </div>
+          <div class="d-flex flex-column border-bottom pb-2">
+            <span class="text-muted small">Address</span>
+            <span id="sAddress" class="fw-bold">-</span>
+          </div>
+          <div class="pt-3">
+            <div class="d-flex justify-content-between h5">
+              <span>Total</span>
+              <span>&#8377;1499.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
