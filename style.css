@@ -77,6 +77,15 @@
       top: 20px;
     }
 
+    h1.display-5 {
+  letter-spacing: -1px;
+  color: #0f172a;
+}
+
+.text-muted i {
+  margin-right: 5px;
+}
+
     .step { display: none; }
     .step.active { display: block; animation: fadeIn 0.4s ease-out; }
 
